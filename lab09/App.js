@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 
 import HomeScreen from './src/screen/HomeScreen';
@@ -11,6 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [item, setItem] = useState([]);
   useEffect (() => {
     initDb()
     .then((result) => {
@@ -33,6 +33,7 @@ export default function App() {
         );
         console.log('Record ID: ', r2.insertId);
         const result = await getPlaces();
+        setItem(result)
         console.log('Result: ', result.rows._array);
         await clearPlaces();
       })();
@@ -41,9 +42,21 @@ export default function App() {
     .catch((err) => console.log('Бааз бэлтгэхэд асуудал гарлаа !!!', err));
   }, []);
 
+  
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundcolor: '#6A89CC',
+          },
+          headerTintColor: 'white',
+          headerTitleStyle: {
+            fontSize: 22
+          }
+        }}
+      >
         <Stack.Screen 
           name='Home'
           component={HomeScreen}

@@ -1,18 +1,48 @@
-import { React } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { React, useLayoutEffect } from 'react';
+import { StyleSheet, Text, SafeAreaView, View, FlatList } from 'react-native';
+import { Item, HeaderButtons } from 'react-navigation-header-buttons'
+import MyHeaderButton from '../components/MyHeaderButton';
 
 
-export default HomeScreen = ({ navigation }) => {
+
+const Info = ({ title }) => {
+    <View>
+        <Text>{title}</Text>
+    </View>
+}
+
+
+
+export default HomeScreen = ({ items, navigation }) => {
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => {
+                <HeaderButtons HeaderButtonComponents={MyHeaderButton}>
+                    <Item 
+                        title='Add new places'
+                        iconName='pluscircleo'
+                        onPress={() => navigation.navigate('MapScreen')}
+                    />
+                </HeaderButtons>
+            }
+        })
+    })
+
+    const renderItem = ({ item }) => {
+        <Info title={item.title} />
+    }
+
     return (
-        <View style={styles.contianer}>
-            <Text>Home NewPlace</Text>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate('MapScreen')}
-            >
-                <Text style={styles.buttonText}>Press here!!!</Text>
-            </TouchableOpacity>
-        </View>
+        <SafeAreaView style={styles.contianer}>
+            <Text>Place list</Text>
+            <FlatList 
+                style={{ flex: 1 }}
+                contentContainerStyle={{ flex: 1, alignItems: 'center' }}
+                data={items}
+                renderItem={renderItem}
+            />
+        </SafeAreaView>
     );
 };
 
